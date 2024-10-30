@@ -38,7 +38,7 @@ const chartConfig = {
   },
   wrong: {
     label: 'Wrong',
-    color: 'hsl(var(--chart-2))',
+    color: 'hsl(45, 36%, 93%)',
   },
 } satisfies ChartConfig
 
@@ -47,9 +47,9 @@ export const  ResultChart = ({correctAnswer, wrongAnswers}:props) => {
       {
         answer: 'correct',
         score: correctAnswer,
-        fill: 'var(--color-chrome)',
+        fill: 'green',
       },
-      { answer: 'wrong', score: wrongAnswers, fill: 'var(--color-safari)' },
+      { answer: 'wrong', score: wrongAnswers, fill: 'red' },
     ]
   const totalScore = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.score, 0)
@@ -93,7 +93,7 @@ export const  ResultChart = ({correctAnswer, wrongAnswers}:props) => {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalScore.toLocaleString()}
+                          {correctAnswer.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
