@@ -43,6 +43,7 @@ const QuizCreation = ({ topic: topicParam }: Props) => {
   const { toast } = useToast()
   const { mutate: getQuestions, isLoading } = useMutation({
     mutationFn: async ({ amount, topic, type }: Input) => {
+      console.log(amount)
       const response = await axios.post('/api/game', { amount, topic, type })
       return response.data
     },
