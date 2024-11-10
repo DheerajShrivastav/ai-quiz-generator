@@ -8,8 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { CircleCheckBig, CircleX } from 'lucide-react'
 import { ResultChart } from '@/components/ResultChart'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 
 type Props = {
   params: {
@@ -47,13 +47,20 @@ const fetchquestions = async ({ params: { gameId } }: Props) => {
   return { ...res, correctAnswersCount, sumOfQuestions }
 }
 
-
 const statisticsPage = async ({ params: { gameId } }: Props) => {
   const game = await fetchquestions({ params: { gameId } })
   return (
     <div>
-      <div>statisticsPage:{gameId}</div>
-      <div>{JSON.stringify(game)}</div>
+      <div className="flex justify-center">
+        <Card className="flex flex-1 flex-row justify-center max-w-5xl">
+          <ResultChart
+            correctAnswer={game.correctAnswersCount}
+            wrongAnswers={game.sumOfQuestions - game.correctAnswersCount}
+          />
+        </Card>
+      </div>
+      {/* <div>statisticsPage:{gameId}</div>
+      <div>{JSON.stringify(game)}</div> */}
       <h1>Game Topic: {game[0].topic}</h1>
       <Table>
         <TableHeader>
@@ -87,8 +94,9 @@ const statisticsPage = async ({ params: { gameId } }: Props) => {
       </Table>
       <p>Total score: {game.correctAnswersCount} </p>
       <p>Total questions: {game.sumOfQuestions} </p>
-      <p>percentage: {game.correctAnswersCount/game.sumOfQuestions * 100} % </p>
-      <ResultChart correctAnswer={game.correctAnswersCount} wrongAnswers={game.sumOfQuestions - game.correctAnswersCount} />
+      <p>
+        percentage: {(game.correctAnswersCount / game.sumOfQuestions) * 100} %{' '}
+      </p>
     </div>
   )
 }
