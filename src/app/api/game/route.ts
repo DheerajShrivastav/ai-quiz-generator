@@ -8,21 +8,21 @@ import axios from 'axios'
 export async function POST(req: Request, res: Response) {
   try {
     const session = await getAuthSession()
-    // if (!session?.user) {
-    //   return NextResponse.json(
-    //     { error: 'You must be logged in to create a game.' },
-    //     {
-    //       status: 401,
-    //     }
-    //   )
-    // }
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'You must be logged in to create a game.' },
+        {
+          status: 401,
+        }
+      )
+    }
     const body = await req.json()
     const { topic, type, amount } = quizCreationSchema.parse(body)
     const game = await prisma.game.create({
       data: {
         gameType: type,
         timeStarted: new Date(),
-        userId: session?.user.id || "test",
+        userId: session?.user.id || 'test',
         topic,
       },
     })
@@ -41,13 +41,13 @@ export async function POST(req: Request, res: Response) {
       },
     })
 
-     const {data} = await axios.post('http://localhost:3000/api/questions', {
-       amount,
-       topic,
-       type,
-     })
-     
-     console.log(data)
+    const { data } = await axios.post('http://localhost:3000/api/questions', {
+      amount,
+      topic,
+      type,
+    })
+
+    console.log(data)
     if (type === 'mcq') {
       type mcqQuestion = {
         question: string
@@ -77,7 +77,6 @@ export async function POST(req: Request, res: Response) {
       await prisma.question.createMany({
         data: manyData,
       })
-      
     } else if (type === 'open_ended') {
       type openQuestion = {
         question: string
@@ -160,8 +159,9 @@ export async function GET(req: Request, res: Response) {
       }
     )
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
-      { error: 'An unexpected error occurred.' },
+      { error: error },
       {
         status: 500,
       }
