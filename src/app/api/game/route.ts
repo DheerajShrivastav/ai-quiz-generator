@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import axios from 'axios'
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const session = await getAuthSession()
     if (!session?.user) {
@@ -113,17 +113,8 @@ export async function POST(req: Request, res: Response) {
     }
   }
 }
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request) {
   try {
-    const session = await getAuthSession()
-    // if (!session?.user) {
-    //   return NextResponse.json(
-    //     { error: 'You must be logged in to create a game.' },
-    //     {
-    //       status: 401,
-    //     }
-    //   )
-    // }
     const url = new URL(req.url)
     const gameId = url.searchParams.get('gameId')
     if (!gameId) {

@@ -18,7 +18,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { number } from 'zod'
 
 type props = {
   correctAnswer: number
@@ -49,9 +48,6 @@ export const ResultChart = ({ correctAnswer, wrongAnswers }: props) => {
     },
     { answer: 'wrong', score: wrongAnswers, fill: 'red' },
   ]
-  const totalScore = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.score, 0)
-  }, [])
 
   return (
     <Card className="flex flex-col ">
