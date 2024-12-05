@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ResultChart } from '@/components/ResultChart'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 
 type Props = {
   params: {

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 import stringSimilarity from 'string-similarity-js'
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const body = await req.json()
     const { questionId, userInput } = checkAnswerSchema.parse(body)
