@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       )
 
       questions = await strict_output(
-        'You are a helpful AI that is able to generate mcq questions and answers, the length of each answer should not be more than 15 words, store all answers and questions and options in a JSON array',
+        'You are an AI designed to generate multiple-choice questions (MCQs) with concise answers. Create each question with four options, clearly marked as A, B, C, and D, and provide a corresponding correct answer. Each answer should not exceed 15 words. Store all questions, options, and correct answers in a JSON array format. Return only the JSON array, with no additional text or explanation.', 
         prompts,
         {
           question: 'question',
@@ -54,6 +54,8 @@ export async function POST(req: Request) {
 
       // Debugging: Log the number of questions generated
       console.log(`Generated ${questions.length} MCQ questions.`)
+      // debuggeing: log the questions
+      console.log(amount)
 
       // Safeguard to limit the output to the requested amount
       questions = questions.slice(0, amount)

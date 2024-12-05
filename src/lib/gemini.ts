@@ -63,9 +63,9 @@ export async function strict_output(
       contents: [
         {
           role: 'model',
-          parts: [{ text: system_prompt + output_format_prompt + error_msg}] 
+          parts: [{ text: system_prompt + output_format_prompt + error_msg }],
         },
-        { role: 'user', parts:[{ text: user_prompt.toString() }]  },
+        { role: 'user', parts: [{ text: user_prompt.toString() }] },
       ],
       generationConfig: {
         maxOutputTokens: 1000,
@@ -76,8 +76,23 @@ export async function strict_output(
     let res: string = result.response.text()
 
     // ensure that we don't replace away apostrophes in text
-    res = res.replace(/(\w)"(\w)/g, "$1'$2")
+    // res = res.replace(/(\w)"(\w)/g, "$1'$2")
+    res = res.replace(/^[^{]*\[/, '[') // This regex removes everything before the first '['
 
+    // Remove any leading text before the JSON array
+    res = res.replace(/^[^{]*\[/, '[') // This regex removes everything before the first '['
+
+    // Remove unwanted characters including surrounding ```json and ```
+    res = res.replace(/```json\s*|\s*```/g, '') // Remove ```json and ``
+
+    // Fix the improperly formatted objects
+    // res = res.replace(/"question":/g, '{"question":') // Add opening brace for each question
+    res = res.replace(/},\s*"/g, '},\n"') // Ensure each object ends correctly
+    res = res.replace(/},\s*$/g, '}') // Remove trailing commas after the last object
+    res = res.replace(/,\s*}/g, '}') // Remove any commas before closing braces
+
+    // Wrap the entire response in square brackets
+    // res = '[' + res + ']'
     if (verbose) {
       console.log(
         'System prompt:',
