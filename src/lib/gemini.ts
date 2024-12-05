@@ -20,7 +20,7 @@ export async function strict_output(
   output_format: OutputFormat,
   default_category: string = '',
   output_value_only: boolean = false,
-  temperature: number = 1.0,
+  // temperature: number = 1.0,
   num_tries: number = 3,
   verbose: boolean = false
 ): Promise<
