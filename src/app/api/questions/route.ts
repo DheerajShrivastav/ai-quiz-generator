@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     
     const body = await req.json()
     const { amount, topic, type } = getQuestionsSchema.parse(body)
-    let questions: any
+    let questions: { question: string; answer: string }[] = []
 
     if (type === 'open_ended') {
       const prompts = Array.from(

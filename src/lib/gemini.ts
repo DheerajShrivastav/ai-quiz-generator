@@ -13,6 +13,11 @@ const models = genAI.getGenerativeModel({
 interface OutputFormat {
   [key: string]: string | string[] | OutputFormat
 }
+interface OutputItem {
+  question: string
+  answer: string
+  [key: string]: any
+}
 
 export async function strict_output(
   system_prompt: string,
@@ -23,12 +28,7 @@ export async function strict_output(
   // temperature: number = 1.0,
   num_tries: number = 3,
   verbose: boolean = false
-): Promise<
-  {
-    question: string
-    answer: string
-  }[]
-> {
+): Promise<OutputItem | OutputItem[]> {
   // if the user input is in a list, we also process the output as a list of json
   const list_input: boolean = Array.isArray(user_prompt)
   // if the output format contains dynamic elements of < or >, then add to the prompt to handle dynamic elements
@@ -104,14 +104,16 @@ export async function strict_output(
 
     // try-catch block to ensure output format is adhered to
     try {
-      let output: any = JSON.parse(res)
+      let output: OutputItem | OutputItem[] = JSON.parse(res) as
+        | OutputItem
+        | OutputItem[]
 
       if (list_input) {
         if (!Array.isArray(output)) {
           throw new Error('Output format not in a list of json')
         }
       } else {
-        output = [output]
+        output = [output as OutputItem]
       }
 
       // check for each element in the output_list, the format is correctly adhered to
@@ -147,7 +149,10 @@ export async function strict_output(
 
         // if we just want the values for the outputs
         if (output_value_only) {
-          output[index] = Object.values(output[index])
+          output[index] = Object.values(output[index]).reduce((acc, val, idx) => {
+            acc[Object.keys(output_format)[idx]] = val;
+            return acc;
+          }, {} as OutputItem)
           // just output without the list if there is only one element
           if (output[index].length === 1) {
             output[index] = output[index][0]
