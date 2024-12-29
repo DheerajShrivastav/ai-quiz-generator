@@ -85,9 +85,9 @@ export const ResultChart = ({ correctAnswer, wrongAnswers }: props) => {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-white text-3xl font-bold "
                         >
-                          {correctAnswer.toLocaleString()}
+                          {correctAnswer?.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}

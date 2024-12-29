@@ -3,6 +3,12 @@ import { getQuestionsSchema } from '@/schemas/questions'
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
+interface OutputItem {
+  question: string
+  answer: string
+  [key: string]: any
+}
+
 export const runtime = 'nodejs'
 export const maxDuration = 500
 
@@ -11,7 +17,9 @@ export async function POST(req: Request) {
     
     const body = await req.json()
     const { amount, topic, type } = getQuestionsSchema.parse(body)
-    let questions: { question: string; answer: string }[] = []
+    let questions: OutputItem | OutputItem[] = [] as
+        | OutputItem
+        | OutputItem[] 
 
     if (type === 'open_ended') {
       const prompts = Array.from(

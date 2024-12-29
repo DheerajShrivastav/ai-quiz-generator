@@ -15,7 +15,7 @@ const page = () => {
         <h1>Quize genrator</h1>
         <p>Quize genrator is a simple app to generate quizes</p>
         <h3>enter your topic and amount of questions</h3>
-        <form onSubmit={handleSubmit()}>
+        <form onSubmit={handleSubmit}>
             <label>Topic</label>
             <input type="text" name="topic" />
             <label>Amount</label>

@@ -11,6 +11,24 @@ import {
 import { ResultChart } from '@/components/ResultChart'
 import { Card } from '@/components/ui/card'
 
+type Question = {
+  id: string
+  question: string
+  options: any
+  userAnswer: string | null
+  answer: string | null
+  isCorrect: boolean | null
+}
+type Game = {
+  id: string
+  topic: string
+  questions: Question[]
+}
+
+type FetchQuestionsResponse = {
+  correctAnswersCount: number
+  sumOfQuestions: number
+} & Game
 type Props = {
   params: {
     gameId: string
@@ -18,7 +36,7 @@ type Props = {
 }
 
 const fetchquestions = async ({ params: { gameId } }: Props) => {
-  const res = await prisma.game.findMany({
+  const res = await prisma.game.findUnique({
     where: {
       id: gameId,
     },
@@ -35,6 +53,9 @@ const fetchquestions = async ({ params: { gameId } }: Props) => {
       },
     },
   })
+  if (!res) {
+    return null // or handle the case where no game is found
+  }
   // Calculate the sum of correct answers
   const correctAnswersCount = await prisma.question.count({
     where: {
@@ -42,13 +63,16 @@ const fetchquestions = async ({ params: { gameId } }: Props) => {
       isCorrect: true,
     },
   })
-  const sumOfQuestions = res[0].questions.length
+  const sumOfQuestions = res.questions.length
 
   return { ...res, correctAnswersCount, sumOfQuestions }
 }
 
 const statisticsPage = async ({ params: { gameId } }: Props) => {
   const game = await fetchquestions({ params: { gameId } })
+  if (!game) {
+    return <div>No game found</div>
+  }
   return (
     <div>
       <div className="flex justify-center">
@@ -61,7 +85,7 @@ const statisticsPage = async ({ params: { gameId } }: Props) => {
       </div>
       {/* <div>statisticsPage:{gameId}</div>
       <div>{JSON.stringify(game)}</div> */}
-      <h1>Game Topic: {game[0].topic}</h1>
+      <h1>Game Topic: {game.topic}</h1>
       <Table>
         <TableHeader>
           <TableRow>
@@ -72,7 +96,7 @@ const statisticsPage = async ({ params: { gameId } }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {game[0].questions.map((question) => (
+          {game.questions.map((question: Question) => (
             <TableRow key={question.id}>
               <TableCell>{question.question}</TableCell>
               <TableCell>{question.answer}</TableCell>
