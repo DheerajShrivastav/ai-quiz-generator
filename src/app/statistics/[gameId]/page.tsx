@@ -19,11 +19,11 @@ type Question = {
   answer: string | null
   isCorrect: boolean | null
 }
-type Game = {
-  id: string
-  topic: string
-  questions: Question[]
-}
+// type Game = {
+//   id: string
+//   topic: string
+//   questions: Question[]
+// }
 
 // type FetchQuestionsResponse = {
 //   correctAnswersCount: number
