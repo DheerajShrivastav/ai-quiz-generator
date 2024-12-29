@@ -25,10 +25,10 @@ type Game = {
   questions: Question[]
 }
 
-type FetchQuestionsResponse = {
-  correctAnswersCount: number
-  sumOfQuestions: number
-} & Game
+// type FetchQuestionsResponse = {
+//   correctAnswersCount: number
+//   sumOfQuestions: number
+// } & Game
 type Props = {
   params: {
     gameId: string
